@@ -2896,6 +2896,7 @@ function plotLeftSideOfResume(svg) {
         map = new google.maps.Map(document.getElementById("mapDiv"), {
             zoom: 8,
             center: currentLoc,
+            fullscreenControl: false,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 

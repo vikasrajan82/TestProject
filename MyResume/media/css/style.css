@@ -240,7 +240,6 @@ text {
 
 .skillInfoContainerSection {
     position: absolute;
-    z-index: 500;
     cursor: default;
     background-color: rgb(255,248,230); /*rgb(238, 238, 238);*/
     border-radius: 10px;
