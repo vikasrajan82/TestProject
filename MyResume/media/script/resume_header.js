@@ -2828,35 +2828,54 @@ function plotLeftSideOfResume(svg) {
         .text("CRM Consultant");
 
     svg.append("image")
-        .attr("xlink:href", "email.png")
+        .attr("xlink:href", "media/img/linkedin.png")
         .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 10)
-        .attr("y", nameYAxis + 60)
+        .attr("y", nameYAxis + 45)
         .attr("width", "14")
         .attr("height", "14");
 
-    svg.append("text")
+    svg.append("a")
+        .attr("xlink:href", "#")
+        .attr("onclick", "window.open('https://www.linkedin.com/in/vikas-rajan-082956a/', ''); return false;")
+        .append("text")
         .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 32)
-        .attr("y", nameYAxis + 71)
+        .attr("y", nameYAxis + 56)
         .attr("text-anchor", "start")
         .attr("class", "emailLabel")
-        .text("virajan@microsoft.com");
+        .text("vikas-rajan");
 
     svg.append("image")
-        .attr("xlink:href", "phone.png")
+        .attr("xlink:href", "media/img/email.png")
         .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 10)
-        .attr("y", nameYAxis + 90)
+        .attr("y", nameYAxis + 70)
+        .attr("width", "14")
+        .attr("height", "14");
+
+    svg.append("a")
+        .attr("xlink:href", "mailto:evikas.rajan@gmail.com")
+        .append("text")
+        .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 32)
+        .attr("y", nameYAxis + 81)
+        .attr("text-anchor", "start")
+        .attr("class", "emailLabel")
+        .text("evikas.rajan@gmail.com");
+
+    svg.append("image")
+        .attr("xlink:href", "media/img/phone.png")
+        .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 10)
+        .attr("y", nameYAxis + 95)
         .attr("width", "14")
         .attr("height", "14");
 
     svg.append("text")
         .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 32)
-        .attr("y", nameYAxis + 101)
+        .attr("y", nameYAxis + 106)
         .attr("text-anchor", "start")
         .attr("class", "phoneAddrLabel")
         .text("+919663581144");
 
     svg.append("image")
-        .attr("xlink:href", "home.gif")
+        .attr("xlink:href", "media/img/home.gif")
         .attr("x", xLeftStart - leftSideWidth + calendarBuffer + 10)
         .attr("y", nameYAxis + 120)
         .attr("width", "14")
@@ -2885,7 +2904,7 @@ function plotLeftSideOfResume(svg) {
         .attr("class", "mapDivSection")
         .style("width", calendarTitleWidth + "px")
         .style("height", "120px")
-        .style("top", (nameYAxis + 151) + "px")
+        .style("top", (nameYAxis + 150) + "px")
         .style("left", (xLeftStart - leftSideWidth + calendarBuffer) + "px");
 
     try {

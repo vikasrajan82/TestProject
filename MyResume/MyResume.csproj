@@ -62,9 +62,9 @@
     <Content Include="Close.png" />
     <Content Include="d3.js" />
     <Content Include="d3.tip.v0.6.3.js" />
-    <Content Include="email.png" />
+    <Content Include="media\img\email.png" />
     <Content Include="flag.jpg" />
-    <Content Include="home.gif" />
+    <Content Include="media\img\home.gif" />
     <Content Include="home.png" />
     <Content Include="media\css\style.css" />
     <Content Include="media\css\style.min.css">
@@ -73,6 +73,7 @@
     <Content Include="media\img\close.png" />
     <Content Include="media\img\collapse.png" />
     <Content Include="media\img\expand.png" />
+    <Content Include="media\img\linkedin.png" />
     <Content Include="media\img\minus.png" />
     <Content Include="media\img\noteBG.png" />
     <Content Include="media\img\plus.jpg" />
@@ -92,7 +93,7 @@
       <DependentUpon>resume_tracking.js</DependentUpon>
     </Content>
     <Content Include="media\video\LyncExtension.mp4" />
-    <Content Include="phone.png" />
+    <Content Include="media\img\phone.png" />
     <Content Include="Resume.htm" />
     <Content Include="toparrow.png" />
     <Content Include="Web.config" />
