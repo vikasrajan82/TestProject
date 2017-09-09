@@ -62,8 +62,10 @@
     <Content Include="Close.png" />
     <Content Include="d3.js" />
     <Content Include="d3.tip.v0.6.3.js" />
+    <Content Include="media\img\download.png" />
     <Content Include="media\img\email.png" />
     <Content Include="flag.jpg" />
+    <Content Include="media\img\help.png" />
     <Content Include="media\img\home.gif" />
     <Content Include="home.png" />
     <Content Include="media\css\style.css" />
@@ -80,6 +82,8 @@
     <Content Include="media\img\plus.png" />
     <Content Include="media\img\plus_img.png" />
     <Content Include="media\img\profile_image.jpg" />
+    <Content Include="media\img\question.png" />
+    <Content Include="media\img\winword.ico" />
     <Content Include="media\script\resume_body.js" />
     <Content Include="media\script\resume_body.min.js">
       <DependentUpon>resume_body.js</DependentUpon>
@@ -111,6 +115,9 @@
     <Content Include="media\script\resume_tracking.min.js.map">
       <DependentUpon>resume_tracking.js</DependentUpon>
     </Content>
+    <Content Include="media\pdf\Cert_DynamicsCRM2016Online.pdf" />
+    <Content Include="media\pdf\Cert_MicrosoftAzureSolutions.pdf" />
+    <Content Include="media\word\Vikas_Rajan.docx" />
     <None Include="Properties\PublishProfiles\vikasresume.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

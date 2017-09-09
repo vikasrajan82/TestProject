@@ -57,10 +57,14 @@ function drawCircle(svg, xStart, yStart, position, height, orientation, directio
     var circleRadius = 12;
     var buffer = midCoordinate;
     if (orientation === "top") {
-        buffer = midCoordinate - 100 - (circleRadius + 40) * position;
+        buffer = midCoordinate - (height * .15) - (circleRadius + 40) * position;
     } else {
-        buffer = midCoordinate + 100 + (circleRadius + 40) * position;
+        buffer = midCoordinate + (height * .15) + (circleRadius + 40) * position;
     }
+
+    console.log(height)
+    console.log(midCoordinate);
+    console.log(buffer);
 
     svg.append("circle")
         .attr("cx", xCircleStart)
@@ -166,27 +170,282 @@ function expandCollapseDiv(obj) {
     }
 }
 
+function removeHelpPage(){
+    d3.select("#helpDiv").remove();
+    d3.selectAll("div.helpText").remove();
+    hideOverlay();
+}
+
+function drawArrow(curvePoints) {
+    var edge;
+
+    if (document.getElementById("svgArrow")) {
+        edge = d3.select("#svgArrow");
+    }
+    else {
+        edge = d3.select("body")
+                    .append("div")
+                    .attr("id", "helpDiv")
+                    .style("z-index",600)
+                    .style("top", 0)
+                    .style("left", 0)
+                    .style("height", "100%")
+                    .style("width", "100%")
+                    .style("position","absolute")
+                    .append("svg")
+                    .style("width", "100%")
+                    .style("height", "100%")
+                    .on("click",function(){
+                        removeHelpPage();
+                    })
+                    .append("g")
+                    .attr("id", "svgArrow");
+    }
+
+    if (curvePoints) {
+        if (curvePoints.length == 2) {
+            var lowerX = curvePoints[0][0] > curvePoints[1][0] ? curvePoints[1][0] : curvePoints[0][0],
+                lowerY,
+                upperX,
+                upperY;
+
+            if (curvePoints[0][0] > curvePoints[1][0]) {
+                lowerX = curvePoints[1][0];
+                upperX = curvePoints[0][0];
+            }
+            else {
+                lowerX = curvePoints[0][0];
+                upperX = curvePoints[1][0];
+            }
+
+            if (curvePoints[0][1] > curvePoints[1][1]) {
+                lowerY = curvePoints[1][1];
+                upperY = curvePoints[0][1];
+            }
+            else {
+                lowerY = curvePoints[0][1];
+                upperY = curvePoints[1][1];
+            }
+
+            curvePoints.splice(1, 0, [(lowerX + (upperX - lowerX) * 0.8), (lowerY + upperY) / 2])
+        }
+    }
+
+     var bezierLine = d3.svg.line()
+                        .x(function (d) { return d[0]; })
+                        .y(function (d) { return d[1]; })
+                        .interpolate("basis"),
+         linearLine = d3.svg.line()
+                        .x(function (d) { return d[0]; })
+                        .y(function (d) { return d[1]; })
+                        .interpolate("linear");
+
+    edge
+        .append('path')
+        .attr("d", bezierLine(curvePoints))
+        .attr("stroke", "white")
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+
+    edge
+        .append("path")
+        .attr("d", linearLine([
+            [curvePoints[2][0], curvePoints[2][1] + (curvePoints[2][1] > curvePoints[0][1] ? -7 : 7)],
+            [curvePoints[2][0],curvePoints[2][1]],
+            [curvePoints[2][0] + (curvePoints[2][0] > curvePoints[0][0] ? -7 : 7), curvePoints[2][1]]]))
+        .attr("stroke", "white")
+        .attr('stroke-width', 2)
+        .attr('fill', 'none');
+}
+
+function getCordinates(obj) {
+    var transformValue = obj.attr("transform");
+    var coordinate = {};
+    if (transformValue) {
+        transformValue = transformValue.substr(transformValue.indexOf("(")).replace("(", "").replace(")", "");
+        if (transformValue.length > 0) {
+            var separator = transformValue.indexOf(",") > -1 ? "," : " ";
+            coordinate.x = parseFloat(transformValue.split(separator)[0]);
+            coordinate.y = parseFloat(transformValue.split(separator)[1]);
+            return coordinate;
+        }
+    }
+    return null;
+}
+
+
+function displayHelpSection() {
+    displayOverlay("0.6");
+
+    var infoDivWidth = 200,
+        hackathonStartDate = new Date(allEvents[0].eventDate.getFullYear() - 6, allEvents[0].eventDate.getMonth(), allEvents[0].eventDate.getDate()),
+        certificateStartDate = new Date(allEvents[1].eventDate.getFullYear() - 2, allEvents[1].eventDate.getMonth(), allEvents[1].eventDate.getDate()),
+        infoProjectTop = (timelineyStart + 150),
+        infoProjectLeft = (tdLeftWidth + yearScale(employmentDetails[0].start) + (yearScale(employmentDetails[0].end) - yearScale(employmentDetails[0].start) - infoDivWidth) / 2),
+        infoHackathonLeft = tdLeftWidth + yearScale(hackathonStartDate),
+        infoHackathonTop = (timelineyStart + 100),
+        infoCertificatesTop = (timelineyStart - 100),
+        infoCertificatesLeft = tdLeftWidth + yearScale(certificateStartDate) - infoDivWidth / 2;
+
+    if (document.getElementById("group_" + pageNames[2].id)) {
+        d3.select("body")
+            .append("div")
+            .attr("class", "helpText")
+            .style("top", infoProjectTop + "px")
+            .style("left", infoProjectLeft + "px")
+            .style("width", infoDivWidth + "px")
+            .style("position", "absolute")
+            .text("Click on the shaded section to learn more about the projects");
+
+        drawArrow([[(infoProjectLeft + infoDivWidth / 2), infoProjectTop], [(infoProjectLeft + infoDivWidth / 2 - 80), timelineyStart - 10]]);
+
+        d3.select("body")
+            .append("div")
+            .attr("class", "helpText")
+            .style("top", infoHackathonTop + "px")
+            .style("left", infoHackathonLeft + "px")
+            .style("width", infoDivWidth + "px")
+            .style("position", "absolute")
+            .text("Click here to learn about the Hackathon Event");
+
+        drawArrow([[(infoHackathonLeft + infoDivWidth + 30), infoHackathonTop + 40], [(tdLeftWidth + allEvents[0].xCordinate), (allEvents[0].yCordinate + 20)]]);
+
+        d3.select("body")
+            .append("div")
+            .attr("class", "helpText")
+            .style("top", infoCertificatesTop + "px")
+            .style("left", infoCertificatesLeft + "px")
+            .style("width", infoDivWidth + "px")
+            .style("position", "absolute")
+            .text("Click here to view the certificates");
+
+        drawArrow([[(infoCertificatesLeft + infoDivWidth / 2 - 40), infoCertificatesTop + 70], [(tdLeftWidth + allEvents[1].xCordinate), (allEvents[1].yCordinate + 20)]]);
+    }
+
+    if (document.getElementById("group_" + pageNames[1].id)) {
+
+        var skillSetCoordinates = getCordinates(d3.select("text.skillName")),
+            skillGroupCoordinates = getCordinates(d3.select("#group_pathSkills")),
+            yearLabelCoordinates = getCordinates(d3.select("text.yearHeaderName")),
+            infoSkillTop = (skillSetCoordinates.y + 60),
+            infoSkillLeft = (tdLeftWidth + skillSetCoordinates.x - mainPageWidth / 3 + skillGroupCoordinates.x / 2),
+            infoYearTop = (yearLabelCoordinates.y + 20),
+            infoYearLeft = (tdLeftWidth + yearLabelCoordinates.x - mainPageWidth / 3 + skillGroupCoordinates.x);
+
+        if (skillSetCoordinates) {
+            d3.select("body")
+                .append("div")
+                .attr("class", "helpText")
+                .style("top", infoSkillTop + "px")
+                .style("left", infoSkillLeft + "px")
+                .style("width", infoDivWidth + "px")
+                .style("position", "absolute")
+                .text("Click on each skill to learn more about it");
+
+            drawArrow([[(infoSkillLeft + infoDivWidth - 20), (infoSkillTop + 40)], [(tdLeftWidth + skillSetCoordinates.x + 20 + skillGroupCoordinates.x), (skillSetCoordinates.y + 40)]]);
+        }
+
+        if (yearLabelCoordinates) {
+            d3.select("body")
+                .append("div")
+                .attr("class", "helpText")
+                .style("top", infoYearTop + "px")
+                .style("left", infoYearLeft + "px")
+                .style("width", infoDivWidth + "px")
+                .style("position", "absolute")
+                .text("Indicates years active on the selected skill");
+
+            drawArrow([[(infoYearLeft + infoDivWidth - 20), (infoYearTop + 40)], [(tdLeftWidth + yearLabelCoordinates.x + 20 + skillGroupCoordinates.x), (yearLabelCoordinates.y)]]);
+        }
+    }
+
+    d3.select("body")
+        .append("div")
+        .attr("class", "helpText")
+        .style("top", (menuTopOffset + 40) + "px")
+        .style("right", (menuRightOffset + menuWidth + 40) + "px")
+        .style("width", infoDivWidth + "px")
+        .style("position", "absolute")
+        .text("Help!!");
+
+    drawArrow([[(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth - 20 + infoDivWidth)), (menuTopOffset + 60)], [(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth + 30)), (menuTopOffset + 30)]]);
+
+    d3.select("body")
+        .append("div")
+        .attr("class", "helpText")
+        .style("top", (menuTopOffset + 140) + "px")
+        .style("right", (menuRightOffset + menuWidth) + "px")
+        .style("width", infoDivWidth + "px")
+        .style("position", "absolute")
+        .text("Click here to download the resume in MS Word");
+
+    drawArrow([[(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth) - infoDivWidth / 2), (menuTopOffset + 140)], [(tdLeftWidth + tdContentWidth - (menuRightOffset + 20)), (menuTopOffset + 30)]]);
+
+    d3.select("body")
+        .append("div")
+        .attr("class", "helpText")
+        .style("top", (nameYAxis + 40) + "px")
+        .style("left", (tdLeftWidth * 0.8) + "px")
+        .style("width", (infoDivWidth - 40) + "px")
+        .style("position", "absolute")
+        .text("Click here to expand the map");
+    
+    drawArrow([[(tdLeftWidth * 0.8 + (infoDivWidth - 80) / 2), (nameYAxis + 110)], [(tdLeftWidth / 2), (nameYAxis + 180)]]);
+
+
+
+    d3.selectAll("div.helpText").attr("onclick", "removeHelpPage();");
+}
+
+
 function showPersonalDetailsOption(svg) {
-    var boxPosition = yearScale(new Date(2017, 02, 25)),
-        perCont = svg.append("g")
-        .attr("transform", "translate(" + boxPosition + ",100)");
+    personalDetailsPositionX = yearScale(new Date(2017, 02, 25));
+    personalDetailsPositionY = yStart + 35;
+     var perCont = svg.append("g")
+        .attr("transform", "translate(" + personalDetailsPositionX + "," + personalDetailsPositionY + ")"),
+         containerWidth = 80,
+         buttonWidth = 36;
+
+    d3.select("#wordDownload").remove();
+    d3.select("body")
+            .append("a")
+            .attr("id","wordDownload")
+            .attr("xlink:href", "#")
+            .attr("onclick", "logTrace('Downloaded the resume in Word format'); window.open('media/word/Vikas_Rajan.docx', ''); return false;")
+            .append("img")
+            .style('top', menuTopOffset + "px")
+            .style("right", menuRightOffset + "px")
+            .style("position", "absolute")
+            .style("cursor", "pointer")
+            .attr('width', 28)
+            .attr('height', 28)
+            .attr('title', "Download as MS Word")
+            .attr("src", "media/img/winword.ico");
+
+    d3.select("#helpLink").remove();
+    d3.select("body")
+            .append("a")
+            .attr("id", "helpLink")
+            .attr("xlink:href", "#")
+            .attr("onclick", "logTrace('Clicked on the Help Section'); displayHelpSection();")
+            .append("img")
+            .style('top', menuTopOffset + "px")
+            .style("right", (menuRightOffset + menuWidth) + "px")
+            .style("position", "absolute")
+            .style("cursor", "pointer")
+            .attr('width', 28)
+            .attr('height', 28)
+            .attr('title', "Click for Help")
+            .attr("src", "media/img/help.png");
 
     svg.append("g")
-        .attr("transform", "translate(" + (boxPosition - 10) + ",115)")
-        //.append("rect")
-        ////.attr("x", 0)
-        ////.attr("y", 0)
-        //.attr("height", 120)
-        //.attr("width", 120)
-        //.attr("fill", "red");
+        .attr("transform", "translate(" + (personalDetailsPositionX - 10) + "," + (personalDetailsPositionY + 15) + ")")
         .append("text")
         .attr("text-anchor", "end")
         .attr("class", "personalLabel")
-        //.attr("transform", 'translate(0,0)')
         .text("Show Personal Events");
 
-    var containerWidth = 80;
-    var buttonWidth = 36;
+    
 
     perCont.append("path")
         .attr("d", rightRoundedRect(0, 0, containerWidth, 20, 3))
@@ -599,7 +858,7 @@ function plotTotalWorkExperience(svg, startDate, cy) {
         .attr("fill", "rgb(138,199,196)")
         .transition()
         .duration(1000)
-        .delay(4000)
+        .delay(3000)
         .attr("d", mainTimeLine(0, 0, expEnd - expStart, expBarWidth, expBarWidth / 2));
 
     totalExp.append("text")
@@ -609,28 +868,71 @@ function plotTotalWorkExperience(svg, startDate, cy) {
         .attr("fill", "rgb(67, 67, 67)")
         .transition()
         .duration(500)
-        .delay(5000)
+        .delay(4000)
         .text("Total Experience: 12 Years");
 }
 
-function plotOtherAchievements(svg, cy) {
-    var xStart = yearScale(new Date(2014, 08, 01)),
-        yStart = cy + 50;
+function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cutOffHeight) {
+    var xStart = yearScale(event.eventDate),
+        yStart = cy + height,
+        durationScale;
 
-    svg.append("line")
-        .attr("x1", xStart)
-        .attr("y1", cy)
-        .attr("x2", xStart)
-        .attr("y2", cy)
-        //.attr("x2", yearScale(new Date(2014, 08, 01)))
-        //.attr("y2", yStart)
-        .style("stroke-dasharray", ("1, 1"))
-        .attr("stroke", "black")
-        .transition()
-        .duration(500)
-        .delay(3000)
-        .attr("x2", yearScale(new Date(2014, 08, 01)))
-        .attr("y2", yStart);
+    if (leftOffset && cutOffHeight) {
+        durationScale = d3.scale.linear().domain([0, height + leftOffset]).range([0, 500]);
+
+        svg.append("line")
+            .attr("x1", xStart)
+            .attr("y1", cy)
+            .attr("x2", xStart)
+            .attr("y2", cy)
+            .style("stroke-dasharray", ("1, 1"))
+            .attr("stroke", "black")
+            .transition()
+            .duration(durationScale(cutOffHeight))
+            .delay(delayTime)
+            .attr("x2", xStart)
+            .attr("y2", (cy + cutOffHeight));
+
+        svg.append("line")
+            .attr("x1", xStart)
+            .attr("y1", (cy + cutOffHeight))
+            .attr("x2", xStart)
+            .attr("y2", (cy + cutOffHeight))
+            .style("stroke-dasharray", ("1, 1"))
+            .attr("stroke", "black")
+            .transition()
+            .duration(durationScale(leftOffset))
+            .delay(delayTime + durationScale(cutOffHeight))
+            .attr("x2", (xStart - leftOffset))
+            .attr("y2", (cy + cutOffHeight));
+
+        svg.append("line")
+            .attr("x1", (xStart - leftOffset))
+            .attr("y1", (cy + cutOffHeight))
+            .attr("x2", (xStart - leftOffset))
+            .attr("y2", (cy + cutOffHeight))
+            .style("stroke-dasharray", ("1, 1"))
+            .attr("stroke", "black")
+            .transition()
+            .duration(durationScale((height - cutOffHeight)))
+            .delay(delayTime + durationScale(cutOffHeight))
+            .attr("x2", (xStart - leftOffset))
+            .attr("y2", (cy + height));
+    }
+    else {
+        svg.append("line")
+          .attr("x1", xStart)
+          .attr("y1", cy)
+          .attr("x2", xStart)
+          .attr("y2", cy)
+          .style("stroke-dasharray", ("1, 1"))
+          .attr("stroke", "black")
+          .transition()
+          .duration(500)
+          .delay(delayTime)
+          .attr("x2", xStart)
+          .attr("y2", yStart);
+    }
 
     svg.append("circle")
         .attr("cx", xStart)
@@ -639,8 +941,12 @@ function plotOtherAchievements(svg, cy) {
         .attr("fill", "rgb(233,209,179)")
         .transition()
         .duration(300)
-        .delay(3000)
+        .delay(delayTime)
         .attr("r", 5);
+
+    if (leftOffset) {
+        xStart = xStart - leftOffset;
+    }
 
     svg.append("circle")
         .attr("cx", xStart)
@@ -649,12 +955,13 @@ function plotOtherAchievements(svg, cy) {
         .attr("fill", "black")
         .transition()
         .duration(300)
-        .delay(3300)
+        .delay(delayTime + 300)
         .attr("r", 2);
 
-    var hackathonDesc = "Participated in the Hackathon Event to create \"Lync Extension For Dynamics CRM\"";
+    event.xCordinate = xStart;
+    event.yCordinate = yStart;
 
-    var splitTexts = splitSentencestoSmallerStings(hackathonDesc, 35);
+    var splitTexts = splitSentencestoSmallerStings(event.desc, 35);
 
     if (splitTexts) {
         splitTexts.forEach(function (item, index) {
@@ -693,40 +1000,54 @@ function plotOtherAchievements(svg, cy) {
                         });
 
                     var divContent = divContainer.append("div")
-                        .attr("class", "videoContent")
-                        .style("height", (mapExpandedHeight - 30 - 10 * 2) + "px");
+                                .attr("class", "videoContent")
+                                .style("height", (mapExpandedHeight - 30 - 10 * 2) + "px");
 
-                    var tableRow = divContent.append("table")
-                        .style("height", "100%")
-                        .style("width", "100%")
-                        .append("tr");
+                    if (event.isPdf) {
+                        if (event.url) {
+                            var pdfContent = divContent.append("iframe")
+                                                .attr("height", "100%")
+                                                .attr("width", "100%")
+                                                .attr("frameborder", "0")
+                                                .attr("src", "/media/pdf/" + event.url + "#page=1&view=fitH");//
 
-                    tableRow.append("td")
-                        .style("width", "65%")
-                        .style("padding-top", "0px")
-                        .attr("valign", "top")
-                        .append("video")
-                        .style("width", "100%")
-                        .style("height", (mapExpandedHeight - 60 - 20 * 2) + "px")
-                        .attr("controls", "true")
-                        .append("source")
-                        .attr("src", "media/video/lyncextension.mp4");
+                            pdfContent.append("p")
+                                       .html("This browser does not support PDF. Please download the PDF to view it: <a href=\"media/pdf/" + event.url + "\">Report</a>.");
+                        }
+                    }
+                    else {
+                        var tableRow = divContent.append("table")
+                            .style("height", "100%")
+                            .style("width", "100%")
+                            .append("tr");
 
-                    var hackathonDesc = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class='hackLabel'>Dynamics CRM has always provided great extensibility features. Several desktop applications have been built to interact with it. The most notable being the outlook client. The idea here is to build a similar Lync Client for CRM. Lync is mainly used for communication in most organization around the world. The Lync Add-in for CRM would be a value add for customers who tend to have both of these Microsoft product; Lync & Dynamics CRM 2013. Based on the feedback from different customers, it has been observed that most contacts within CRM are also present as users within Lync. And lot of business meetings/conversations happen via Lync. Hence, integrating the Lync client with CRM will enable them to easily record all these interactions as activities within CRM. The Lync Add-in will be a one-time installation that has to be performed on the client machine. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This was submitted as part of the Hackathon event conducted in the year 2014. The project details are available at the hackathon site <a href='https://onehack.azurewebsites.net/project/495693c9-cb11-e411-903f-00155d5066d7' target='_blank'>here</a>.</font>";
+                        tableRow.append("td")
+                            .style("width", "65%")
+                            .style("padding-top", "0px")
+                            .attr("valign", "top")
+                            .append("video")
+                            .style("width", "100%")
+                            .style("height", (mapExpandedHeight - 60 - 20 * 2) + "px")
+                            .attr("controls", "controls")
+                            .attr("autoplay","autoplay")
+                            .append("source")
+                            .attr("src", "media/video/lyncextension.mp4");
 
-                    tableRow.append("td")
-                        .style("padding-top", "25px")
-                        .style("padding-left", "18px")
-                        .style("padding-right", "10px")
-                        .attr("valign", "top")
-                        .html(hackathonDesc);
+                        var hackathonDesc = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class='hackLabel'>Dynamics CRM has always provided great extensibility features. Several desktop applications have been built to interact with it. The most notable being the outlook client. The idea here is to build a similar Lync Client for CRM. Lync is mainly used for communication in most organization around the world. The Lync Add-in for CRM would be a value add for customers who tend to have both of these Microsoft product; Lync & Dynamics CRM 2013. Based on the feedback from different customers, it has been observed that most contacts within CRM are also present as users within Lync. And lot of business meetings/conversations happen via Lync. Hence, integrating the Lync client with CRM will enable them to easily record all these interactions as activities within CRM. The Lync Add-in will be a one-time installation that has to be performed on the client machine. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This was submitted as part of the Hackathon event conducted in the year 2014. The project details are available at the hackathon site <a href='https://onehack.azurewebsites.net/project/495693c9-cb11-e411-903f-00155d5066d7' target='_blank'>here</a>.</font>";
+
+                        tableRow.append("td")
+                            .style("padding-top", "5px")
+                            .style("padding-left", "18px")
+                            .style("padding-right", "10px")
+                            .attr("valign", "top")
+                            .html(hackathonDesc);
+                    }
                 })
                 .transition()
-                .delay(3600)
+                .delay(delayTime + 600)
                 .text(item);
         });
     }
-
 }
 
 function splitSentencestoSmallerStings(sentence, partLength) {
@@ -747,6 +1068,64 @@ function splitSentencestoSmallerStings(sentence, partLength) {
     }
 
     return parts;
+}
+
+function drawTurnLeaf(svg, xStart, yStart, mainPageWidth, mainPageHeight, radius) {
+    var startPositionX = xStart + mainPageWidth,
+        startPositionY = yStart + mainPageHeight - 100 -  radius;
+    var upperLeafBorder = [
+        { x: startPositionX, y: startPositionY },
+        { x: startPositionX - 5, y: startPositionY + 8 },
+        { x: startPositionX - 14, y: startPositionY + 11 },
+        { x: startPositionX - 25, y: startPositionY + 18 },
+        { x: (startPositionX - 51), y: (startPositionY + 24) },
+        { x: (startPositionX - 80), y: (startPositionY + 25) }
+    ],
+    secondCurveX = upperLeafBorder[upperLeafBorder.length - 1].x,
+    secondCurveY = upperLeafBorder[upperLeafBorder.length - 1].y,
+    secondCurveEndX = startPositionX - 100,
+    secondCurveEndY = yStart + mainPageHeight,
+    lowerLeafBorder = [
+        { x: secondCurveX, y: secondCurveY },
+        { x: secondCurveX - 04, y: secondCurveY + 64 },
+        { x: secondCurveX - 10, y: secondCurveY + 70 },
+        { x: secondCurveX - 13, y: secondCurveY + 76 },
+        { x: secondCurveX - 15, y: secondCurveY + 81 },
+        { x: secondCurveEndX, y: secondCurveEndY }
+    ],
+    turnShadow = [
+        { x: startPositionX, y: startPositionY },
+        { x: startPositionX - 1, y: startPositionY + 20 },
+        //{ x: secondCurveX - 10, y: secondCurveY + 70 },
+        //{ x: secondCurveX - 13, y: secondCurveY + 76 },
+        { x: secondCurveEndX + 20, y: secondCurveEndY + 1 },
+        { x: secondCurveEndX, y: secondCurveEndY }
+    ];
+
+    var d3TurnLeaf = d3.svg.line()
+        .x(function (d) {
+            return d.x;
+        })
+        .y(function (d) {
+            return d.y;
+        })
+        .interpolate("basis"),
+        path1 = d3TurnLeaf(upperLeafBorder),
+        path2 = d3TurnLeaf(lowerLeafBorder);
+
+    var pathString = path1 + path2.substr(path2.indexOf("C1"));
+
+    svg.append("path")
+        .attr("d", pathString)
+        .attr("class","mainBookSection")
+        .attr("fill", "none");
+
+    svg.append("path")
+        .attr("d", d3TurnLeaf(turnShadow))
+        //.attr("class", "mainBookSection")
+        .attr("fill", "url(#skillSetGradient)")
+        .attr("stroke","none");
+
 }
 
 
@@ -1000,11 +1379,15 @@ function plotPersonalEvents(svg, cy) {
         .ease("linear");
 }
 
-function displayOverlay() {
+function displayOverlay(opacity) {
     d3.select("body")
         .append("div")
         .attr("class", "overlaySection")
         .attr("id", "divOverlay");
+
+    if (opacity) {
+        d3.select("#divOverlay").style("opacity", opacity);
+    }
 }
 
 function hideOverlay() {
@@ -1176,7 +1559,7 @@ function displayProjectDetailsInOverLay(d) {
 
 function drawEmploymentArea(svg, cy) {
 
-    var employmentDetails = [{
+    employmentDetails = [{
         start: new Date(2004, 09, 23),
         end: new Date(2007, 09, 31),
         color: "rgb(151,188,215)",
@@ -1598,7 +1981,7 @@ function plotTimeline(svg) {
 
 function removeClickEvent(pathId) {
     d3.select("#skillInfoSection").remove();
-
+    
     pageNames.map(function (item) {
         if (item.id == pathId) {
             d3.select("#" + pathId).on("click", null);
@@ -1633,12 +2016,34 @@ function resizeEnd() {
         if (tip) {
             tip.hide();
         }
+        removeHelpPage();
+        hideOverlay();
         plotBothPages();
     }
 }
 
 function drawSummaryPage() {
     var summaryPageName = pageNames[2].id;
+        allEvents = [
+            {
+                eventDate: new Date(2014, 08, 01),
+                desc: "Participated in the Hackathon Event to create \"Lync Extension For Dynamics CRM\"",
+                isPdf: false
+            },
+            {
+                eventDate: new Date(2015, 09, 13),
+                desc: "Completed certification for \"Developing Microsoft Azure Solutions\"",
+                isPdf: true,
+                url: "Cert_MicrosoftAzureSolutions.pdf"
+
+            },
+            {
+                eventDate: new Date(2017, 04, 28),
+                desc: "Completed certification for \"Microsoft Dynamics CRM 2016 Online Deployment\"",
+                isPdf: true,
+                url: "Cert_DynamicsCRM2016Online.pdf"
+            }
+        ];
 
     removeClickEvent(summaryPageName);
 
@@ -1651,10 +2056,35 @@ function drawSummaryPage() {
     drawEmploymentArea(summaryGroup, timelineyStart);
 
     plotOnsiteTravelDetails(summaryGroup, timelineyStart + timelineHeight);
+    
+    allEvents.map(function (event, index) {
+        if (index < allEvents.length - 1 && (yearScale(allEvents[index + 1].eventDate) - yearScale(event.eventDate)) < 86) {
+            plotOtherAchievements(
+            summaryGroup,
+            event,
+            timelineyStart + timelineHeight,
+            index % 2 == 0 ? 100 : 50,
+            3000 + index * 600,
+            60,
+            30);
+        }
+        else {
+            plotOtherAchievements(
+                summaryGroup,
+                event,
+                timelineyStart + timelineHeight,
+                index % 2 == 0 ? 130 : 40,
+                3000 + index * 600);
+        }
+    });
 
-    plotOtherAchievements(summaryGroup, timelineyStart + timelineHeight);
+    //plotOtherAchievements(summaryGroup, new Date(2014, 08, 01), timelineyStart + timelineHeight, "Participated in the Hackathon Event to create \"Lync Extension For Dynamics CRM\"", 130, 3000);
 
-    plotTotalWorkExperience(summaryGroup, new Date(2004, 10, 23), mainPageHeight * 0.85); // + timelineHeight + 180 (2 * timelineyStart * 1)
+    //plotOtherAchievements(summaryGroup, new Date(2015, 09, 13), timelineyStart + timelineHeight, "Completed certification for \"Developing Microsoft Azure Solutions\"", 50, 3600);
+
+    //plotOtherAchievements(summaryGroup, new Date(2017, 04, 28), timelineyStart + timelineHeight, "Completed certification for \"Microsoft Dynamics CRM 2016 Online Deployment\"", 130, 4200);
+
+    plotTotalWorkExperience(summaryGroup, new Date(2004, 10, 23), yStart + mainPageHeight * 0.85); // + timelineHeight + 180 (2 * timelineyStart * 1)
 
     showPersonalDetailsOption(summaryGroup);
 }
@@ -1759,20 +2189,21 @@ function plotMySkillSet() {
     var skillSetPageName = pageNames[1].id;
 
     removeClickEvent(skillSetPageName);
+
     var skillGroup = svg.append("g")
         .attr("id", "group_" + skillSetPageName)
         .attr("transform", "translate(0,0)");
-
-    var innerRadius = (((tdContentHeight / 2) - 80) > 293.5 ? 293.5 : ((tdContentHeight / 2) - 80)),
-        outerRadius = (((tdContentHeight / 2) - 60) > 313.5 ? 313.5 : ((tdContentHeight / 2) - 60)),
+    
+    var innerRadius = (((mainPageHeight / 2) - 50) > 293.5 ? 293.5 : ((mainPageHeight / 2) - 50)),
+        outerRadius = (((mainPageHeight / 2) - 30) > 313.5 ? 313.5 : ((mainPageHeight / 2) - 30)),
         outerArc = d3.svg.arc()
-        .cornerRadius(5)
-       .innerRadius(innerRadius)
-       .outerRadius(outerRadius)
-       .startAngle(function (d) { return d.startAngle * (Math.PI / 180); })
-       .endAngle(function (d) { return d.endAngle * (Math.PI / 180); }),
+                       .cornerRadius(5)
+                       .innerRadius(innerRadius)
+                       .outerRadius(outerRadius)
+                       .startAngle(function (d) { return d.startAngle * (Math.PI / 180); })
+                       .endAngle(function (d) { return d.endAngle * (Math.PI / 180); }),
         radiusX = (tdContentWidth / 2),
-        radiusY = ((tdContentHeight / 2) - 10),
+        radiusY = (yStart + (mainPageHeight / 2)),
         endYear = ((new Date()).getFullYear() + 4),
         arcRanges = [],
         degreeRange = d3.scale.linear().domain([2004, endYear]).range([0, 360]);
@@ -1862,20 +2293,27 @@ function plotMySkillSet() {
         percentage: 45,
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have been working on SQL Server ever since I started working on .NET Projects. Most of the projects had SQL as its back-end database. As a result, I was very actively involved in the design, development and optimization of the databases. I was also briefly involved to work as a SQL Administrator. These included activities like taking backup, replication, etc."
     }, {
+        skill: "SSIS",
+        skillId: "SSIS",
+        yearsUsed: "2014,2015,2016",
+        yearsRange: "2014-2016",
+        percentage: 40,
+        tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have been part of couple of data migration projects for CRM. These had extensive use of SSIS packages to migrate data either from legacy or earlier versions of CRM to the target version. The data from the legacy system had to be cleansed and manipulated to make it adaptable for the destination system.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since CRM online does not expose the database layer, we had a challenge to push data into CRM. As part of the last project, we created a custom SSIS adapter that allowed an easy UI to select the destination entity and attributes. The adapter was responsible for making calls internally to the CRM instance. The adapter allowed Insert, Update, Delete and Upsert operations on the CRM instance."
+    }, {
         skill: "ASP.NET",
         skillId: "ASPNet",
         yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012",
         yearsRange: "2004-2012",
         percentage: 50,
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Most of the web-based projects that I have worked on before joining Microsoft was on ASP.NET. While I was definitely involved in the development of the project, I used to contribute to the design and optimization of the code as well. Have spent a significant amount of time in reviews and training of other members of the team on ASP.NET"
-    }, /*{
-        skill: "Oracle 11G",
-        skillId: "Oracle11G",
-        yearsUsed: "2009,2010,2011,2012",
-        yearsRange: "2009-2012",
-        percentage: 30,
-        tipDesc: "Before joining Microsoft, I was working on .NET and web-based technologies for around 8 years. I was looking for a shift to a new domain & technology and that’s when this opportunity to work for Microsoft came by. So, I have been working on Microsoft Dynamics CRM for the last 4 years. I started with CRM 2011 and soon graduated to 2016/Dynamics 365. During my tenure here in Microsoft, I have worked with several noteworthy clients like NEC, Wipro Technologies, HT Media, etc. <br>For the last two years, I have been engaged with a project for Texas WIC (Women, Infant & Children). The solution helps to efficiently manage the applicants and participants of this program. The system should allow applicants to be enrolled to the program provided they meet the stipulated eligibility guidelines."
-    },*/ {
+    }, {
+        skill: "Azure",
+        skillId: "Azure",
+        yearsUsed: "2015,2016,2017",
+        yearsRange: "2015-2017",
+        percentage: 40,
+        tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last 3 years, I have been invovled in the development of various components within Microsoft Azure (eg: Cloud Service, Application Insights and Schedulers). As part of my recent project, I had developed an Azure Cloud Service that was responsible for executing several tasks in a batch module. An Azure Scheduler was later configured to invoke the worker service at stipulated intervals.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Azure Service was robust in the sense that it had retry and detailed error logging mechanism. All the logs were pushed to either application insights or to CRM. This allowed the administrators for a quick snapshot of each execution status without having to log into the Azure Portal."
+    }, {
         skill: "MS CRM 2013/2015",
         skillId: "MSCRM",
         percentage: 90,
@@ -1912,18 +2350,18 @@ function plotMySkillSet() {
             };
         }
 
-        var innerRadius = startArc - 15 - 20 * index,
-            outerRadius = startArc - 20 * index,
-            skillCurve = d3.svg.arc()
+        skillInnerRadius = startArc - 15 - 20 * index;
+        skillOuterRadius = startArc - 20 * index;
+        var skillCurve = d3.svg.arc()
                             .cornerRadius(20)
-                            .innerRadius(innerRadius)
-                            .outerRadius(outerRadius)
+                            .innerRadius(skillInnerRadius)
+                            .outerRadius(skillOuterRadius)
                             .startAngle(0);
 
         skillGroup.append("text")
             .text(skillSet.skill)
             .attr("text-anchor", "end")
-            .attr("transform", "translate(" + (radiusX - 10) + "," + (radiusY - ((outerRadius + innerRadius) / 2) + 4) + ")")
+            .attr("transform", "translate(" + (radiusX - 10) + "," + (radiusY - ((skillOuterRadius + skillInnerRadius) / 2) + 4) + ")")
             .attr("skillId", skillSet.skillId)
             .attr("class", "skillName");
 
@@ -1985,14 +2423,15 @@ function plotMySkillSet() {
                                             .attr("transform", "translate(" + (((tdContentHeight / 2) - 60) + (tdContentWidth / 2) - 40) + ",0)");
 
                     setTimeout(function () {
-                        var divContainer = d3.select("body")
+                        var divTop = (yStart + (mainPageHeight / 2 - outerRadius)),
+                            divContainer = d3.select("body")
                                                 .append("div")
                                                 .attr("class", "skillInfoContainerSection")
                                                 .attr("id", "skillInfoSection")
-                                                .style("top", ((tdContentHeight - mainPageHeight) / 2) + 20 + "px")
+                                                .style("top", divTop + "px")
                                                 .style("left", (tdLeftWidth + ((tdContentHeight / 2) - 60) + (tdContentWidth / 2) - 40 - 100) + "px")
                                                 .style("width", width + "px")
-                                                .style("height", (mainPageHeight * 0.9 - 100) + "px")
+                                                .style("height", (mainPageHeight - divTop - 80) + "px")
                                                 .style("padding", "0px");
 
                         //divContainer.append("img")
@@ -2704,6 +3143,17 @@ function plotLeftSideOfResume(svg) {
         .attr("class", "mainBookSection")
         .attr("fill", "url(#mainPageGradient)");
 
+    //d3.select("body")
+    //    .append("div")
+    //    .style("position", "absolute")
+    //    .style("left", (xLeftStart - leftSideWidth + calendarBuffer) + "px")
+    //    .style("top", calendarYStart + "px")
+    //    .style("width", calendarTitleWidth + "px")
+    //    .attr("class","phoneAddrLabel")
+    //    .text("Around 12 years of experience in web-development with technologies like ASP.NET, C#, SQL Server, JavaScript, CSS, JQuery, Microsoft Dynamics CRM, SSIS, etc. Have been actively involved for the last two years in data visualization technologies like d3.js, etc. Looking forward to explore opportunities which are a blend of the Dynamics and data analytics world.")
+
+    //*********Calendar Creation**************//
+    // Start
     svg.append("rect")
         .attr("x", xLeftStart - leftSideWidth + calendarBuffer)
         .attr("y", calendarYStart)
@@ -2786,16 +3236,17 @@ function plotLeftSideOfResume(svg) {
         .text(function (d) {
             return d.day.getDate();
         });
+    // End
+    //******************Calendar End*****************//
 
 
     var profileImageWidth = 100;
 
-    var nameYAxis = mainPageHeight - 270,
-        profileImageHeight = 120;
+    nameYAxis = yStart + mainPageHeight - 285;
+    profileImageHeight = 120;
 
     d3.select("body")
             .append("img")
-            //.style('top', (weekTitleULine + 55 + (allDaysInCurrentMonth[allDaysInCurrentMonth.length - 1].position + 1) * 20) + "px")
             .style('top', (nameYAxis - profileImageHeight - 30) + "px")
             .style('left', (xLeftStart - leftSideWidth + calendarBuffer + (calendarTitleWidth - profileImageWidth) / 2) + "px")
             .style("position", "absolute")

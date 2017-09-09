@@ -1,4 +1,6 @@
-﻿html,
+﻿@import url('https://fonts.googleapis.com/css?family=Caveat');
+
+html,
 body {
     height: 100%;
     overflow: hidden;
@@ -128,7 +130,7 @@ text {
 }
 
 .overlaySection {
-    visibility: show;
+    visibility: visible;
     opacity: 0.7;
     top: 0;
     left: 0;
@@ -136,7 +138,19 @@ text {
     position: absolute;
     min-width: 100%;
     min-height: 100%;
+    z-index:500;
 }
+
+.helpText {
+   font-family: caveat;
+    font-weight: normal;
+    color:white;
+    /*color:#478e27;*/
+    font-size: 18pt;
+    z-index:600;
+    cursor:default;
+}
+
 
 .jobDescription:hover {
     cursor:pointer;

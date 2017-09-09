@@ -25,6 +25,7 @@ var resizeTime,
     svgLeft,
     currentLoc,
     officeLoc,
+    allEvents,
     bookmarkOffset = 10,
     pageNames = [
         { id: "pathInterests", label: "INTERESTS" },
@@ -32,7 +33,7 @@ var resizeTime,
         { id: "pathExperience", label: "EXPERIENCE" }
     ],
     xStart = 15,
-    yStart = 25,
+    yStart = 45,
     mainPageWidth,
     mainPageHeight,
     radius = 10,
@@ -45,7 +46,17 @@ var resizeTime,
     initialDate = new Date(2004, 00, 01),
     endDate = new Date(2018, 06, 30),
     range,
-    yearScale;
+    employmentDetails,
+    yearScale,
+    personalDetailsPositionX,
+    personalDetailsPositionY,
+    menuTopOffset = 7,
+    menuRightOffset = 35,
+    menuWidth = 45,
+    nameYAxis,
+    skillInnerRadius,
+    skillOuterRadius,
+    profileImageHeight;
 
 
 var element;
@@ -189,10 +200,10 @@ function plotBothPages() {
 
 
     mainPageWidth = tdContentWidth - 80;
-    mainPageHeight = tdContentHeight - 70;
+    mainPageHeight = tdContentHeight - 77;
     timelineWidth = mainPageWidth * 0.85;
     timelinexStart = xStart + (mainPageWidth - timelineWidth) / 2;
-    timelineyStart = yStart + 340;
+    timelineyStart = yStart + tdContentHeight * 0.38;
     
     range = {
         lowerBound: parseFloat(timelinexStart),
@@ -295,23 +306,25 @@ function plotBothPages() {
         .attr("class", "mainBookSection")
         .attr("fill", "url(#mainPageGradient)");
 
-
+    //drawTurnLeaf(svg, xStart, yStart, mainPageWidth, mainPageHeight, radius);
 
     plotLeftSideOfResume(svgLeft);
 
     drawSummaryPage();
 
+    console.log(mainPageHeight);
+
     //plotMySkillSet();
 
     //displayProjectDetails(svg);
 
-    //// Draws the circles on the left side of the page (bottom section)
+    //// Draws the circles on the left/right side of the page (top section)
     for (i = 0; i < 4; i++) {
         drawCircle(svg, xStart, yStart, i, mainPageHeight, "top", "right");
         drawCircle(svgLeft, tdLeftWidth - xStart, yStart, i, mainPageHeight, "top", "left");
     }
 
-    // Draws the circles on the left side of the page (bottom section)
+    // Draws the circles on the left/right side of the page (bottom section)
     for (i = 0; i < 4; i++) {
         drawCircle(svg, xStart, yStart, i, mainPageHeight, "bottom", "right");
         drawCircle(svgLeft, tdLeftWidth - xStart, yStart, i, mainPageHeight, "bottom", "left");
