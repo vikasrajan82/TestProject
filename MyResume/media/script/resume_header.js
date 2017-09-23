@@ -972,6 +972,7 @@ function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cu
                 .attr("alt", "Click here for the submission video")
                 .on("click", function () {
                     d3.select("#divHackathonEvents").remove();
+                    logTrace("The Hackathon project has been clicked by the user");
 
                     displayOverlay();
 
@@ -997,6 +998,7 @@ function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cu
                         .on("click", function () {
                             hideOverlay();
                             d3.select("#divHackathonEvents").remove();
+                            logTrace("The Hackathon project section has been closed");
                         });
 
                     var divContent = divContainer.append("div")
@@ -1031,7 +1033,8 @@ function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cu
                             .attr("controls", "controls")
                             .attr("autoplay","autoplay")
                             .append("source")
-                            .attr("src", "media/video/lyncextension.mp4");
+                            .attr("src", "https://lynchackathon.blob.core.windows.net/asset-feac0540-b0da-4bde-ba6c-a6eb0488b372/LyncExtension.mp4?sv=2015-07-08&sr=c&si=8f36db96-2713-4456-bf25-23a3efd63844&sig=1pWtfvDIT88S1evy1CPTyOjvPji69rQddMpCK8ec5kY%3D&st=2017-09-23T08%3A44%3A54Z&se=2117-09-23T08%3A44%3A54Z")
+                            //.attr("src", "media/video/lyncextension.mp4");
 
                         var hackathonDesc = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class='hackLabel'>Dynamics CRM has always provided great extensibility features. Several desktop applications have been built to interact with it. The most notable being the outlook client. The idea here is to build a similar Lync Client for CRM. Lync is mainly used for communication in most organization around the world. The Lync Add-in for CRM would be a value add for customers who tend to have both of these Microsoft product; Lync & Dynamics CRM 2013. Based on the feedback from different customers, it has been observed that most contacts within CRM are also present as users within Lync. And lot of business meetings/conversations happen via Lync. Hence, integrating the Lync client with CRM will enable them to easily record all these interactions as activities within CRM. The Lync Add-in will be a one-time installation that has to be performed on the client machine. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This was submitted as part of the Hackathon event conducted in the year 2014. The project details are available at the hackathon site <a href='https://onehack.azurewebsites.net/project/495693c9-cb11-e411-903f-00155d5066d7' target='_blank'>here</a>.</font>";
 
@@ -3398,6 +3401,7 @@ function plotLeftSideOfResume(svg) {
                             .attr("expanded", "false")
                             .style("width", calendarTitleWidth + "px")
                             .style("height", "120px")
+                            .style("z-index",500)
                             .style("top", (nameYAxis + 151) + "px")
                             .style("left", (xLeftStart - leftSideWidth + calendarBuffer) + "px");
 
@@ -3410,6 +3414,7 @@ function plotLeftSideOfResume(svg) {
                     .style("left", ((document.body.clientWidth - mapExpandedWidth) / 2 - 15) + "px")
                     .style("width", mapExpandedWidth + "px")
                     .attr("expanded", "true")
+                    .style("z-index",600)
                     .style("height", (mapExpandedHeight - 38) + "px");
                 //map.updateSize();
                 google.maps.event.trigger(map, "resize");

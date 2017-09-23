@@ -171,7 +171,7 @@ text {
 
 .mapContainerSection {
     position: absolute;
-    z-index: 400;
+    z-index: 500;
     cursor: pointer;
     background-color: rgb(238, 238, 238);
     border-radius: 10px;
