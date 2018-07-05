@@ -7,7 +7,12 @@
 window.appInsights = appInsights;
 appInsights.trackPageView();
 
-appInsights.trackEvent("Resume has been invoked");
+var resumeName = "Main";
+if (window.location.href) {
+    if (window.location.href.substring("vikaslinkedin") > -1)
+    { resumeName = "Linked-In";}
+}
+appInsights.trackEvent(resumeName + " resume has been invoked");
 
 function logTrace(message, obj) {
     appInsights.trackEvent(message, obj);

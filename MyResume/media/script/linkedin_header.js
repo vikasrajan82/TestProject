@@ -170,7 +170,7 @@ function expandCollapseDiv(obj) {
     }
 }
 
-function removeHelpPage() {
+function removeHelpPage(){
     d3.select("#helpDiv").remove();
     d3.selectAll("div.helpText").remove();
     hideOverlay();
@@ -186,16 +186,16 @@ function drawArrow(curvePoints) {
         edge = d3.select("body")
                     .append("div")
                     .attr("id", "helpDiv")
-                    .style("z-index", 600)
+                    .style("z-index",600)
                     .style("top", 0)
                     .style("left", 0)
                     .style("height", "100%")
                     .style("width", "100%")
-                    .style("position", "absolute")
+                    .style("position","absolute")
                     .append("svg")
                     .style("width", "100%")
                     .style("height", "100%")
-                    .on("click", function () {
+                    .on("click",function(){
                         removeHelpPage();
                     })
                     .append("g")
@@ -231,14 +231,14 @@ function drawArrow(curvePoints) {
         }
     }
 
-    var bezierLine = d3.svg.line()
-                       .x(function (d) { return d[0]; })
-                       .y(function (d) { return d[1]; })
-                       .interpolate("basis"),
-        linearLine = d3.svg.line()
-                       .x(function (d) { return d[0]; })
-                       .y(function (d) { return d[1]; })
-                       .interpolate("linear");
+     var bezierLine = d3.svg.line()
+                        .x(function (d) { return d[0]; })
+                        .y(function (d) { return d[1]; })
+                        .interpolate("basis"),
+         linearLine = d3.svg.line()
+                        .x(function (d) { return d[0]; })
+                        .y(function (d) { return d[1]; })
+                        .interpolate("linear");
 
     edge
         .append('path')
@@ -251,7 +251,7 @@ function drawArrow(curvePoints) {
         .append("path")
         .attr("d", linearLine([
             [curvePoints[2][0], curvePoints[2][1] + (curvePoints[2][1] > curvePoints[0][1] ? -7 : 7)],
-            [curvePoints[2][0], curvePoints[2][1]],
+            [curvePoints[2][0],curvePoints[2][1]],
             [curvePoints[2][0] + (curvePoints[2][0] > curvePoints[0][0] ? -7 : 7), curvePoints[2][1]]]))
         .attr("stroke", "white")
         .attr('stroke-width', 2)
@@ -310,16 +310,16 @@ function displayHelpSection() {
 
         drawArrow([[(infoHackathonLeft + infoDivWidth + 30), infoHackathonTop + 40], [(tdLeftWidth + allEvents[0].xCordinate), (allEvents[0].yCordinate + 20)]]);
 
-        d3.select("body")
-            .append("div")
-            .attr("class", "helpText")
-            .style("top", infoCertificatesTop + "px")
-            .style("left", infoCertificatesLeft + "px")
-            .style("width", infoDivWidth + "px")
-            .style("position", "absolute")
-            .text("Click here to view the certificates");
+        //d3.select("body")
+        //    .append("div")
+        //    .attr("class", "helpText")
+        //    .style("top", infoCertificatesTop + "px")
+        //    .style("left", infoCertificatesLeft + "px")
+        //    .style("width", infoDivWidth + "px")
+        //    .style("position", "absolute")
+        //    .text("Click here to view the certificates");
 
-        drawArrow([[(infoCertificatesLeft + infoDivWidth / 2 - 40), infoCertificatesTop + 70], [(tdLeftWidth + allEvents[1].xCordinate), (allEvents[1].yCordinate + 20)]]);
+        //drawArrow([[(infoCertificatesLeft + infoDivWidth / 2 - 40), infoCertificatesTop + 70], [(tdLeftWidth + allEvents[1].xCordinate), (allEvents[1].yCordinate + 20)]]);
     }
 
     if (document.getElementById("group_" + pageNames[1].id)) {
@@ -363,23 +363,23 @@ function displayHelpSection() {
         .append("div")
         .attr("class", "helpText")
         .style("top", (menuTopOffset + 40) + "px")
-        .style("right", (menuRightOffset + menuWidth + 40) + "px")
+        .style("right", (menuRightOffset + 40) + "px")
         .style("width", infoDivWidth + "px")
         .style("position", "absolute")
         .text("Help!!");
 
-    drawArrow([[(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth - 20 + infoDivWidth)), (menuTopOffset + 60)], [(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth + 30)), (menuTopOffset + 30)]]);
+    drawArrow([[(tdLeftWidth + tdContentWidth - (menuRightOffset - 20 + infoDivWidth)), (menuTopOffset + 60)], [(tdLeftWidth + tdContentWidth - (menuRightOffset + 30)), (menuTopOffset + 30)]]);
 
-    d3.select("body")
-        .append("div")
-        .attr("class", "helpText")
-        .style("top", (menuTopOffset + 140) + "px")
-        .style("right", (menuRightOffset + menuWidth) + "px")
-        .style("width", infoDivWidth + "px")
-        .style("position", "absolute")
-        .text("Click here to download the resume in MS Word");
+    //d3.select("body")
+    //    .append("div")
+    //    .attr("class", "helpText")
+    //    .style("top", (menuTopOffset + 140) + "px")
+    //    .style("right", (menuRightOffset + menuWidth) + "px")
+    //    .style("width", infoDivWidth + "px")
+    //    .style("position", "absolute")
+    //    .text("Click here to download the resume in MS Word");
 
-    drawArrow([[(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth) - infoDivWidth / 2), (menuTopOffset + 140)], [(tdLeftWidth + tdContentWidth - (menuRightOffset + 20)), (menuTopOffset + 30)]]);
+    //drawArrow([[(tdLeftWidth + tdContentWidth - (menuRightOffset + menuWidth) - infoDivWidth / 2), (menuTopOffset + 140)], [(tdLeftWidth + tdContentWidth - (menuRightOffset + 20)), (menuTopOffset + 30)]]);
 
     d3.select("body")
         .append("div")
@@ -389,7 +389,7 @@ function displayHelpSection() {
         .style("width", (infoDivWidth - 40) + "px")
         .style("position", "absolute")
         .text("Click here to expand the map");
-
+    
     drawArrow([[(tdLeftWidth * 0.8 + (infoDivWidth - 80) / 2), (nameYAxis + 110)], [(tdLeftWidth / 2), (nameYAxis + 180)]]);
 
 
@@ -401,26 +401,26 @@ function displayHelpSection() {
 function showPersonalDetailsOption(svg) {
     personalDetailsPositionX = yearScale(new Date(2017, 02, 25));
     personalDetailsPositionY = yStart + 35;
-    var perCont = svg.append("g")
-       .attr("transform", "translate(" + personalDetailsPositionX + "," + personalDetailsPositionY + ")"),
-        containerWidth = 80,
-        buttonWidth = 36;
+     var perCont = svg.append("g")
+        .attr("transform", "translate(" + personalDetailsPositionX + "," + personalDetailsPositionY + ")"),
+         containerWidth = 80,
+         buttonWidth = 36;
 
-    d3.select("#wordDownload").remove();
-    d3.select("body")
-            .append("a")
-            .attr("id", "wordDownload")
-            .attr("xlink:href", "#")
-            .attr("onclick", "logTrace('Downloaded the resume in Word format'); window.open('media/word/Vikas_Rajan.docx', ''); return false;")
-            .append("img")
-            .style('top', menuTopOffset + "px")
-            .style("right", menuRightOffset + "px")
-            .style("position", "absolute")
-            .style("cursor", "pointer")
-            .attr('width', 28)
-            .attr('height', 28)
-            .attr('title', "Download as MS Word")
-            .attr("src", "media/img/winword.ico");
+    //d3.select("#wordDownload").remove();
+    //d3.select("body")
+    //        .append("a")
+    //        .attr("id","wordDownload")
+    //        .attr("xlink:href", "#")
+    //        .attr("onclick", "logTrace('Downloaded the resume in Word format'); window.open('media/word/Vikas_Rajan.docx', ''); return false;")
+    //        .append("img")
+    //        .style('top', menuTopOffset + "px")
+    //        .style("right", menuRightOffset + "px")
+    //        .style("position", "absolute")
+    //        .style("cursor", "pointer")
+    //        .attr('width', 28)
+    //        .attr('height', 28)
+    //        .attr('title', "Download as MS Word")
+    //        .attr("src", "media/img/winword.ico");
 
     d3.select("#helpLink").remove();
     d3.select("body")
@@ -430,7 +430,7 @@ function showPersonalDetailsOption(svg) {
             .attr("onclick", "logTrace('Clicked on the Help Section'); displayHelpSection();")
             .append("img")
             .style('top', menuTopOffset + "px")
-            .style("right", (menuRightOffset + menuWidth) + "px")
+            .style("right", (menuRightOffset) + "px")
             .style("position", "absolute")
             .style("cursor", "pointer")
             .attr('width', 28)
@@ -445,7 +445,7 @@ function showPersonalDetailsOption(svg) {
         .attr("class", "personalLabel")
         .text("Show Personal Events");
 
-
+    
 
     perCont.append("path")
         .attr("d", rightRoundedRect(0, 0, containerWidth, 20, 3))
@@ -869,7 +869,7 @@ function plotTotalWorkExperience(svg, startDate, cy) {
         .transition()
         .duration(500)
         .delay(4000)
-        .text("Total Experience: 13 Years");
+        .text("Total Experience: 12 Years");
 }
 
 function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cutOffHeight) {
@@ -961,94 +961,108 @@ function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cu
     event.xCordinate = xStart;
     event.yCordinate = yStart;
 
-    var splitTexts = splitSentencestoSmallerStings(event.desc, 35);
+    var splitTexts = splitSentencestoSmallerStings(event.desc, 35),
+        className = "otherAchievementLabel",
+        isClickAble = true;
+
+    if (event.isPdf) {
+        if (!event.url) {
+            className = "certificationLabel";
+            isClickAble = false;
+        }
+    }
 
     if (splitTexts) {
         splitTexts.forEach(function (item, index) {
             svg.append("text")
+                .attr("id", "achievement_" + event.id + "_" + index)
                 .attr("text-anchor", "middle")
                 .attr('transform', 'translate(' + xStart + ', ' + (yStart + 20 + index * 15) + ')')
-                .attr("class", "otherAchievementLabel")
+                .attr("class", className)
                 .attr("alt", "Click here for the submission video")
-                .on("click", function () {
-                    d3.select("#divHackathonEvents").remove();
-                    logTrace("The Hackathon project has been clicked by the user");
-
-                    displayOverlay();
-
-                    var mapExpandedWidth = 0.7 * document.body.clientWidth - 10,
-                        mapExpandedHeight = 0.7 * document.body.clientHeight - 20,
-                        divContainer = d3.select("body")
-                        .append("div")
-                        .attr("class", "videoContainerSection")
-                        .attr("id", "divHackathonEvents")
-                        .style("top", (document.body.clientHeight - mapExpandedHeight - 50) / 2 + "px")
-                        .style("left", (document.body.clientWidth - mapExpandedWidth - 40) / 2 + "px")
-                        .style("width", (mapExpandedWidth) + "px")
-                        .style("height", (mapExpandedHeight) + "px")
-                        .style("padding", "0px");
-
-                    divContainer.append("div")
-                        .attr("class", "videoContainerHeader");
-
-                    divContainer.append("img")
-                        .attr("class", "videoContainerImg")
-                        .attr("src", "./media/img/close.png")
-                        .attr("title", "Close")
-                        .on("click", function () {
-                            hideOverlay();
-                            d3.select("#divHackathonEvents").remove();
-                            logTrace("The Hackathon project section has been closed");
-                        });
-
-                    var divContent = divContainer.append("div")
-                                .attr("class", "videoContent")
-                                .style("height", (mapExpandedHeight - 30 - 10 * 2) + "px");
-
-                    if (event.isPdf) {
-                        if (event.url) {
-                            var pdfContent = divContent.append("iframe")
-                                                .attr("height", "100%")
-                                                .attr("width", "100%")
-                                                .attr("frameborder", "0")
-                                                .attr("src", "/media/pdf/" + event.url + "#page=1&view=fitH");//
-
-                            pdfContent.append("p")
-                                       .html("This browser does not support PDF. Please download the PDF to view it: <a href=\"media/pdf/" + event.url + "\">Report</a>.");
-                        }
-                    }
-                    else {
-                        var tableRow = divContent.append("table")
-                            .style("height", "100%")
-                            .style("width", "100%")
-                            .append("tr");
-
-                        tableRow.append("td")
-                            .style("width", "65%")
-                            .style("padding-top", "0px")
-                            .attr("valign", "top")
-                            .append("video")
-                            .style("width", "100%")
-                            .style("height", (mapExpandedHeight - 60 - 20 * 2) + "px")
-                            .attr("controls", "controls")
-                            .attr("autoplay", "autoplay")
-                            .append("source")
-                            .attr("src", "https://lynchackathon.blob.core.windows.net/asset-feac0540-b0da-4bde-ba6c-a6eb0488b372/LyncExtension.mp4?sv=2015-07-08&sr=c&si=8f36db96-2713-4456-bf25-23a3efd63844&sig=1pWtfvDIT88S1evy1CPTyOjvPji69rQddMpCK8ec5kY%3D&st=2017-09-23T08%3A44%3A54Z&se=2117-09-23T08%3A44%3A54Z")
-                        //.attr("src", "media/video/lyncextension.mp4");
-
-                        var hackathonDesc = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class='hackLabel'>Dynamics CRM has always provided great extensibility features. Several desktop applications have been built to interact with it. The most notable being the outlook client. The idea here is to build a similar Lync Client for CRM. Lync is mainly used for communication in most organization around the world. The Lync Add-in for CRM would be a value add for customers who tend to have both of these Microsoft product; Lync & Dynamics CRM 2013. Based on the feedback from different customers, it has been observed that most contacts within CRM are also present as users within Lync. And lot of business meetings/conversations happen via Lync. Hence, integrating the Lync client with CRM will enable them to easily record all these interactions as activities within CRM. The Lync Add-in will be a one-time installation that has to be performed on the client machine. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This was submitted as part of the Hackathon event conducted in the year 2014. The project details are available at the hackathon site <a href='https://onehack.azurewebsites.net/project/495693c9-cb11-e411-903f-00155d5066d7' target='_blank'>here</a>.</font>";
-
-                        tableRow.append("td")
-                            .style("padding-top", "5px")
-                            .style("padding-left", "18px")
-                            .style("padding-right", "10px")
-                            .attr("valign", "top")
-                            .html(hackathonDesc);
-                    }
-                })
                 .transition()
                 .delay(delayTime + 600)
                 .text(item);
+
+            if (isClickAble) {
+                d3.select("#achievement_" + event.id + "_" + index)
+                    .on("click", function () {
+                        d3.select("#divHackathonEvents").remove();
+                        logTrace("The Hackathon project has been clicked by the user");
+
+                        displayOverlay();
+
+                        var mapExpandedWidth = 0.7 * document.body.clientWidth - 10,
+                            mapExpandedHeight = 0.7 * document.body.clientHeight - 20,
+                            divContainer = d3.select("body")
+                            .append("div")
+                            .attr("class", "videoContainerSection")
+                            .attr("id", "divHackathonEvents")
+                            .style("top", (document.body.clientHeight - mapExpandedHeight - 50) / 2 + "px")
+                            .style("left", (document.body.clientWidth - mapExpandedWidth - 40) / 2 + "px")
+                            .style("width", (mapExpandedWidth) + "px")
+                            .style("height", (mapExpandedHeight) + "px")
+                            .style("padding", "0px");
+
+                        divContainer.append("div")
+                            .attr("class", "videoContainerHeader");
+
+                        divContainer.append("img")
+                            .attr("class", "videoContainerImg")
+                            .attr("src", "./media/img/close.png")
+                            .attr("title", "Close")
+                            .on("click", function () {
+                                hideOverlay();
+                                d3.select("#divHackathonEvents").remove();
+                                logTrace("The Hackathon project section has been closed");
+                            });
+
+                        var divContent = divContainer.append("div")
+                                    .attr("class", "videoContent")
+                                    .style("height", (mapExpandedHeight - 30 - 10 * 2) + "px");
+
+                        if (event.isPdf) {
+                            if (event.url) {
+                                var pdfContent = divContent.append("iframe")
+                                                    .attr("height", "100%")
+                                                    .attr("width", "100%")
+                                                    .attr("frameborder", "0")
+                                                    .attr("src", "/media/pdf/" + event.url + "#page=1&view=fitH");//
+
+                                pdfContent.append("p")
+                                            .html("This browser does not support PDF. Please download the PDF to view it: <a href=\"media/pdf/" + event.url + "\">Report</a>.");
+                            }
+                        }
+                        else {
+                            var tableRow = divContent.append("table")
+                                .style("height", "100%")
+                                .style("width", "100%")
+                                .append("tr");
+
+                            tableRow.append("td")
+                                .style("width", "65%")
+                                .style("padding-top", "0px")
+                                .attr("valign", "top")
+                                .append("video")
+                                .style("width", "100%")
+                                .style("height", (mapExpandedHeight - 60 - 20 * 2) + "px")
+                                .attr("controls", "controls")
+                                .attr("autoplay", "autoplay")
+                                .append("source")
+                                .attr("src", "https://lynchackathon.blob.core.windows.net/asset-feac0540-b0da-4bde-ba6c-a6eb0488b372/LyncExtension.mp4?sv=2015-07-08&sr=c&si=8f36db96-2713-4456-bf25-23a3efd63844&sig=1pWtfvDIT88S1evy1CPTyOjvPji69rQddMpCK8ec5kY%3D&st=2017-09-23T08%3A44%3A54Z&se=2117-09-23T08%3A44%3A54Z")
+                            //.attr("src", "media/video/lyncextension.mp4");
+
+                            var hackathonDesc = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class='hackLabel'>Dynamics CRM has always provided great extensibility features. Several desktop applications have been built to interact with it. The most notable being the outlook client. The idea here is to build a similar Lync Client for CRM. Lync is mainly used for communication in most organization around the world. The Lync Add-in for CRM would be a value add for customers who tend to have both of these Microsoft product; Lync & Dynamics CRM 2013. Based on the feedback from different customers, it has been observed that most contacts within CRM are also present as users within Lync. And lot of business meetings/conversations happen via Lync. Hence, integrating the Lync client with CRM will enable them to easily record all these interactions as activities within CRM. The Lync Add-in will be a one-time installation that has to be performed on the client machine.</font>";
+
+                            tableRow.append("td")
+                                .style("padding-top", "5px")
+                                .style("padding-left", "18px")
+                                .style("padding-right", "10px")
+                                .attr("valign", "top")
+                                .html(hackathonDesc);
+                        }
+                    });
+            }
         });
     }
 }
@@ -1075,7 +1089,7 @@ function splitSentencestoSmallerStings(sentence, partLength) {
 
 function drawTurnLeaf(svg, xStart, yStart, mainPageWidth, mainPageHeight, radius) {
     var startPositionX = xStart + mainPageWidth,
-        startPositionY = yStart + mainPageHeight - 100 - radius;
+        startPositionY = yStart + mainPageHeight - 100 -  radius;
     var upperLeafBorder = [
         { x: startPositionX, y: startPositionY },
         { x: startPositionX - 5, y: startPositionY + 8 },
@@ -1120,14 +1134,14 @@ function drawTurnLeaf(svg, xStart, yStart, mainPageWidth, mainPageHeight, radius
 
     svg.append("path")
         .attr("d", pathString)
-        .attr("class", "mainBookSection")
+        .attr("class","mainBookSection")
         .attr("fill", "none");
 
     svg.append("path")
         .attr("d", d3TurnLeaf(turnShadow))
         //.attr("class", "mainBookSection")
         .attr("fill", "url(#skillSetGradient)")
-        .attr("stroke", "none");
+        .attr("stroke","none");
 
 }
 
@@ -1984,7 +1998,7 @@ function plotTimeline(svg) {
 
 function removeClickEvent(pathId) {
     d3.select("#skillInfoSection").remove();
-
+    
     pageNames.map(function (item) {
         if (item.id == pathId) {
             d3.select("#" + pathId).on("click", null);
@@ -2027,26 +2041,27 @@ function resizeEnd() {
 
 function drawSummaryPage() {
     var summaryPageName = pageNames[2].id;
-    allEvents = [
-        {
-            eventDate: new Date(2014, 08, 01),
-            desc: "Participated in the Hackathon Event to create \"Lync Extension For Dynamics CRM\"",
-            isPdf: false
-        },
-        {
-            eventDate: new Date(2015, 09, 13),
-            desc: "Completed certification for \"Developing Microsoft Azure Solutions\"",
-            isPdf: true,
-            url: "Cert_MicrosoftAzureSolutions.pdf"
+        allEvents = [
+            {
+                eventDate: new Date(2014, 08, 01),
+                desc: "Participated in the Hackathon Event to create \"Lync Extension For Dynamics CRM\"",
+                isPdf: false,
+                id: "LyncExtension"
+            },
+            {
+                eventDate: new Date(2015, 09, 13),
+                desc: "Completed certification for \"Developing Microsoft Azure Solutions\"",
+                isPdf: true,
+                id: "AzureCertification"
 
-        },
-        {
-            eventDate: new Date(2017, 04, 28),
-            desc: "Completed certification for \"Microsoft Dynamics CRM 2016 Online Deployment\"",
-            isPdf: true,
-            url: "Cert_DynamicsCRM2016Online.pdf"
-        }
-    ];
+            },
+            {
+                eventDate: new Date(2017, 04, 28),
+                desc: "Completed certification for \"Microsoft Dynamics CRM 2016 Online Deployment\"",
+                isPdf: true,
+                id: "OnlineDeployment"
+            }
+        ];
 
     removeClickEvent(summaryPageName);
 
@@ -2059,7 +2074,7 @@ function drawSummaryPage() {
     drawEmploymentArea(summaryGroup, timelineyStart);
 
     plotOnsiteTravelDetails(summaryGroup, timelineyStart + timelineHeight);
-
+    
     allEvents.map(function (event, index) {
         if (index < allEvents.length - 1 && (yearScale(allEvents[index + 1].eventDate) - yearScale(event.eventDate)) < 86) {
             plotOtherAchievements(
@@ -2196,7 +2211,7 @@ function plotMySkillSet() {
     var skillGroup = svg.append("g")
         .attr("id", "group_" + skillSetPageName)
         .attr("transform", "translate(0,0)");
-
+    
     var innerRadius = (((mainPageHeight / 2) - 50) > 293.5 ? 293.5 : ((mainPageHeight / 2) - 50)),
         outerRadius = (((mainPageHeight / 2) - 30) > 313.5 ? 313.5 : ((mainPageHeight / 2) - 30)),
         outerArc = d3.svg.arc()
@@ -2265,14 +2280,14 @@ function plotMySkillSet() {
         skill: "C#",
         skillId: "CSharp",
         percentage: 70,
-        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018",
+        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017",
         yearsRange: "2004-Present",
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I was always interested in OOPs programming since the start of coding days (during early college years). I started with PASCAL, C, C++ before making a full-time transition to C#. Though all the projects that I have worked on so far had C# or VB.NET as the back-end language, I would like to make a special mention of SAR and Texas WIC. These are projects that involved a major refactoring of the design framework and I was fortunate enough to have been part of those."
     }, {
         skill: "JavaScript",
         skillId: "Javascript",
         percentage: 80,
-        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018",
+        yearsUsed: "2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017",
         yearsRange: "2004-Present",
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;What is web-development without JavaScript? I was always fascinated with the power of JavaScript. Still remember writing my own code using xmlHttpRequest which is now usually hidden under wrapper frameworks like jquery, angular, etc. I was involved in developing several reusable plugins like Auto-Complete, Editable Grids, Expandable Grids, Outlook, etc. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Somehow the client-side development always interested me more than the server-side development. It could be this interest that has made me to side-line always with web-based projects throughout my career. "
     }, /*{
@@ -2285,7 +2300,7 @@ function plotMySkillSet() {
         skill: "D3.js",
         skillId: "D3js",
         percentage: 55,
-        yearsUsed: "2015,2016,2017,2018",
+        yearsUsed: "2015,2016,2017",
         yearsRange: "2015-Present",
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sometime early in 2015, I was playing around with Microsoft Social Engagement (MSE), a tool which provides a detailed analysis of the social sentiment of your brand. The tool collects the posts from different sources like LinkedIn, Facebook, twitter and presents a neat visualization of the data. This is what that could have aroused my interest in the world of data visualization and the fact that it could transform some otherwise boring data into meaningful insights only added to the curiosity. I have been encouraging the team to use this for my last project and were able to develop some “talking” charts to the customer. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This interactive resume is another attempt to learn the full capabilities of this library."
     }, {
@@ -2312,17 +2327,17 @@ function plotMySkillSet() {
     }, {
         skill: "Azure",
         skillId: "Azure",
-        yearsUsed: "2015,2016,2017,2018",
-        yearsRange: "2015-2018",
+        yearsUsed: "2015,2016,2017",
+        yearsRange: "2015-2017",
         percentage: 40,
         tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last 3 years, I have been invovled in the development of various components within Microsoft Azure (eg: Cloud Service, Application Insights and Schedulers). As part of my recent project, I had developed an Azure Cloud Service that was responsible for executing several tasks in a batch module. An Azure Scheduler was later configured to invoke the worker service at stipulated intervals.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Azure Service was robust in the sense that it had retry and detailed error logging mechanism. All the logs were pushed to either application insights or to CRM. This allowed the administrators for a quick snapshot of each execution status without having to log into the Azure Portal."
     }, {
         skill: "MS CRM 2013/2015",
         skillId: "MSCRM",
         percentage: 90,
-        yearsUsed: "2013,2014,2015,2016,2017,2018",
+        yearsUsed: "2013,2014,2015,2016,2017",
         yearsRange: "2013-Present",
-        tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Before joining Microsoft, I was working on .NET and web-based technologies for around 8 years. I was looking for a shift to a new domain & technology and that’s when this opportunity to work for Microsoft came by. I have been working on Microsoft Dynamics CRM for the last 5 years. I started with CRM 2011 and soon graduated to 2016/Dynamics 365. During my tenure here in Microsoft, I have worked with several noteworthy clients like NEC, Wipro Technologies, HT Media, etc. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last two years, I have been engaged with a project for Texas WIC (Women, Infant & Children). The solution helps to efficiently manage the applicants and participants of this program. The system should allow applicants to be enrolled to the program provided they meet the stipulated eligibility guidelines."
+        tipDesc: "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Before joining Microsoft, I was working on .NET and web-based technologies for around 8 years. I was looking for a shift to a new domain & technology and that’s when this opportunity to work for Microsoft came by. I have been working on Microsoft Dynamics CRM for the last 4 years. I started with CRM 2011 and soon graduated to 2016/Dynamics 365. During my tenure here in Microsoft, I have worked with several noteworthy clients like NEC, Wipro Technologies, HT Media, etc. <br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For the last two years, I have been engaged with a project for Texas WIC (Women, Infant & Children). The solution helps to efficiently manage the applicants and participants of this program. The system should allow applicants to be enrolled to the program provided they meet the stipulated eligibility guidelines."
 
     }],
         skillDataSets = [],
@@ -2399,7 +2414,7 @@ function plotMySkillSet() {
                     tip.style("left", (d3.event.pageX + 20) + "px")
                         .style("top", (d3.event.pageY + 20) + "px");
                 }
-            })
+            })            
             .on("mouseout", function () {
                 tip.hide(skillSet);
 
@@ -3279,7 +3294,7 @@ function plotLeftSideOfResume(svg) {
         .attr("y", nameYAxis + 30)
         .attr("text-anchor", "middle")
         .attr("class", "jdFormat")
-        .text("CRM Consultant");
+        .text("CRM & Visualization Analyst");
 
     svg.append("image")
         .attr("xlink:href", "media/img/linkedin.png")
@@ -3326,7 +3341,7 @@ function plotLeftSideOfResume(svg) {
         .attr("y", nameYAxis + 106)
         .attr("text-anchor", "start")
         .attr("class", "phoneAddrLabel")
-        .text("+919663581144");
+        .text("+91XXXXXXXXXX");
 
     svg.append("image")
         .attr("xlink:href", "media/img/home.gif")
@@ -3401,7 +3416,7 @@ function plotLeftSideOfResume(svg) {
                             .attr("expanded", "false")
                             .style("width", calendarTitleWidth + "px")
                             .style("height", "120px")
-                            .style("z-index", 500)
+                            .style("z-index",500)
                             .style("top", (nameYAxis + 151) + "px")
                             .style("left", (xLeftStart - leftSideWidth + calendarBuffer) + "px");
 
@@ -3414,7 +3429,7 @@ function plotLeftSideOfResume(svg) {
                     .style("left", ((document.body.clientWidth - mapExpandedWidth) / 2 - 15) + "px")
                     .style("width", mapExpandedWidth + "px")
                     .attr("expanded", "true")
-                    .style("z-index", 600)
+                    .style("z-index",600)
                     .style("height", (mapExpandedHeight - 38) + "px");
                 //map.updateSize();
                 google.maps.event.trigger(map, "resize");
@@ -3440,7 +3455,7 @@ function plotLeftSideOfResume(svg) {
                 officerMarker.tooltipContent = 'My workplace...Click for details.';
 
                 var infoWindow = new google.maps.InfoWindow({
-                    content: '<font class="marker-content">303, 1st Block, <br>SMR Vinay Estate<br>Horamavu Main Road<br>Bangalore-560043</font>'
+                    content: '<font class="marker-content">Horamavu Main Road<br>Bangalore-560043</font>'
                 });
 
                 var officeInfoWindow = new google.maps.InfoWindow({

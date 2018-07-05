@@ -84,6 +84,14 @@
     <Content Include="media\img\profile_image.jpg" />
     <Content Include="media\img\question.png" />
     <Content Include="media\img\winword.ico" />
+    <Content Include="media\script\linkedin_header.js" />
+    <Content Include="media\script\linkedin_body.js" />
+    <Content Include="media\script\linkedin_body.min.js">
+      <DependentUpon>linkedin_body.js</DependentUpon>
+    </Content>
+    <Content Include="media\script\linkedin_header.min.js">
+      <DependentUpon>linkedin_header.js</DependentUpon>
+    </Content>
     <Content Include="media\script\resume_body.js" />
     <Content Include="media\script\resume_body.min.js">
       <DependentUpon>resume_body.js</DependentUpon>
@@ -118,6 +126,15 @@
     <Content Include="media\pdf\Cert_DynamicsCRM2016Online.pdf" />
     <Content Include="media\pdf\Cert_MicrosoftAzureSolutions.pdf" />
     <Content Include="media\word\Vikas_Rajan.docx" />
+    <Content Include="media\script\linkedin_body.min.js.map">
+      <DependentUpon>linkedin_body.js</DependentUpon>
+    </Content>
+    <Content Include="media\script\linkedin_header.min.js.map">
+      <DependentUpon>linkedin_header.js</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\vikaslinkedin - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\vikaslinkedin - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\vikaslinkedin.pubxml" />
     <None Include="Properties\PublishProfiles\vikasresume.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
