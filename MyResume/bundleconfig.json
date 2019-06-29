@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "media/script/resume_header.min.js",
+    "inputFiles": [
+      "media/script/resume_header.js"
+    ]
+  },
+  {
+    "outputFileName": "media/script/resume_body.min.js",
+    "inputFiles": [
+      "media/script/resume_body.js"
+    ]
+  }
+]

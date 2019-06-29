@@ -869,7 +869,7 @@ function plotTotalWorkExperience(svg, startDate, cy) {
         .transition()
         .duration(500)
         .delay(4000)
-        .text("Total Experience: 13 Years");
+        .text("Total Experience: 14 Years");
 }
 
 function plotOtherAchievements(svg, event, cy, height, delayTime, leftOffset, cutOffHeight) {
